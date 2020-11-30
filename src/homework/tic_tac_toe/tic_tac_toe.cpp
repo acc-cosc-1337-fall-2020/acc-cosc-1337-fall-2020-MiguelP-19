@@ -4,6 +4,40 @@
 #include <vector>
 #include <iostream>
 
+ostream& operator<<( ostream& out, TicTacToe& ttt)
+{
+    int line = 0;
+    for (int i = 0; i < ttt.pegs.size(); i++)
+    {
+        out<< ttt.pegs[i];
+        if (line == 2)
+        {
+            out<< std::endl;
+            line = 0;
+        }
+        else
+        { 
+        out<< "|";
+        line++;
+        }
+    }
+    return out;
+}
+
+istream& operator>>( istream& in, TicTacToe& ttt)
+{
+    int position;
+    while (position != 0 && ttt.game_over() == false)
+    {
+        cout<< "Enter where you would like to mark the board (1 - 9 ; Enter 0 to stop): ";
+        in>> position;
+        cout<< endl;
+        ttt.mark_board(position);
+        cout<< endl;
+    }
+    return in;
+}
+
 bool TicTacToe::game_over()
 {
     if (check_column_win() || check_row_win() || check_diagonal_win())
@@ -31,26 +65,6 @@ void TicTacToe::mark_board(int position)
 {
     pegs[position - 1] = player;    
     set_next_player();
-}
-
-void TicTacToe::display_board() const
-{
-    int line = 0;
-    for (int i = 0; i < pegs.size(); i++)
-    {
-        std::cout<< pegs[i];
-        if (line == 2)
-        {
-            std::cout<< std::endl;
-            line = 0;
-        }
-        else
-        { 
-        std::cout<< "|";
-        line++;
-        }
-    }
-    
 }
 
 bool TicTacToe::check_column_win()
@@ -105,7 +119,7 @@ bool TicTacToe::check_diagonal_win()
     else false;
 }
 
-void TicTacToe::set_winner()
+const void TicTacToe::set_winner()
 {
     if (player == "X") winner = "O";
     else winner = "X";
